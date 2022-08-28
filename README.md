@@ -1,2 +1,2 @@
 # StopWatch
-https://StopWatchLaasya.ccbp.tech
+https://LaasyaStopWatch.ccbp.tech
