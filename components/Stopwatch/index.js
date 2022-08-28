@@ -3,12 +3,12 @@ import './index.css'
 
 class Stopwatch extends Component {
   state = {
-    isTimeRunning: false,
+    isTimerRunning: false,
     timeElapsedInSeconds: 0,
   }
 
   componentWillUnmount() {
-    clearInterval(this.timerID)
+    clearInterval(this.timerInterval)
   }
 
   getElapsedSecondsInTimeFormat = () => {
@@ -22,29 +22,31 @@ class Stopwatch extends Component {
     return `${stringifiedMinutes}:${stringifiedSeconds}`
   }
 
-  tick = () => {
+  onStopTimer = () => {
+    clearInterval(this.timeInterval)
+    this.setState({isTimerRunning: false})
+  }
+
+  updateTime = () => {
     this.setState(prevState => ({
       timeElapsedInSeconds: prevState.timeElapsedInSeconds + 1,
     }))
   }
 
-  startOrPause = () => {
-    const {isTimeRunning} = this.state
-
-    if (!isTimeRunning) {
-      this.timerID = setInterval(this.tick, 1000)
-    } else {
-      clearInterval(this.timerID)
+  onStartTimer = () => {
+    const {isTimerRunning} = this.state
+    if (!isTimerRunning) {
+      this.timeInterval = setInterval(this.updateTime, 1000)
     }
-    this.setState(prevState => ({isTimeRunning: !prevState.isTimeRunning}))
+    this.setState({isTimerRunning: true})
   }
 
   resetBtn = () => {
     this.setState({
-      isTimeRunning: false,
+      isTimerRunning: false,
       timeElapsedInSeconds: 0,
     })
-    clearInterval(this.timerID)
+    clearInterval(this.timeInterval)
   }
 
   render() {
@@ -70,14 +72,14 @@ class Stopwatch extends Component {
               <button
                 type="button"
                 className="btn btn-green"
-                onClick={this.startOrPause}
+                onClick={this.onStartTimer}
               >
                 Start
               </button>
               <button
                 type="button"
                 className="btn btn-red"
-                onClick={this.startOrPause}
+                onClick={this.onStopTimer}
               >
                 Stop
               </button>
@@ -97,3 +99,4 @@ class Stopwatch extends Component {
 }
 
 export default Stopwatch
+
